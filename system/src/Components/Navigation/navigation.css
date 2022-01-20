@@ -1,0 +1,97 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Raleway", sans-serif;
+}
+
+.navigation {
+  min-height: 100vh;
+  width: 100%;
+  background-image: linear-gradient(rgba(50, 57, 85, 0.7), rgba(4, 9, 30, 0.7)),
+    url(/public/img/classroom.jpg);
+  background-position: center;
+  background-size: cover;
+  position: relative;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  margin: auto;
+}
+
+nav a img {
+  width: 50%;
+  height: auto;
+}
+nav a {
+  width: auto;
+}
+.navlinks {
+  flex: 1;
+  text-align: right;
+}
+
+.navlinks ul li {
+  list-style-type: none;
+  display: inline-block;
+  padding: 8px 12px;
+  position: relative;
+  font-size: 1rem;
+  color: #fff;
+  text-decoration: none;
+}
+.navlinks ul li::after {
+  content: "";
+  width: 0%;
+  height: 2px;
+  background: #f44336;
+  display: block;
+  margin: auto;
+}
+.navlinks ul li:hover::after {
+  width: 100%;
+}
+
+nav label {
+  font-size: 24px;
+  display: none;
+  width: 26px;
+  text-align: center;
+}
+#toggle {
+  display: none;
+}
+.conttwo {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  width: 50%;
+}
+
+@media (max-width: 727px) {
+  nav label {
+    display: block;
+    cursor: pointer;
+  }
+  .navlinks {
+    text-align: center;
+    width: 100%;
+    display: none;
+    position: absolute;
+    top: 5rem;
+    left: 0;
+  }
+  .navlinks a {
+    display: block;
+    border-bottom: 1px solid #eaeaeb;
+    margin: 0;
+    text-align: center;
+  }
+  #toggle:checked + .navlinks {
+    display: block;
+  }
+}
