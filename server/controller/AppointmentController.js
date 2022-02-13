@@ -11,3 +11,13 @@ exports.insertAppointment = (req, res) => {
       res.json(err);
     });
 };
+
+exports.getAppointment = (req, res) => {
+  Appointment.find()
+    .then((appointment) => {
+      res.json(appointment);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+};

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "../InfoForm/infoform.css";
+import axios from "axios";
 import Footer from "../Footer/Footer";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
+import moment from "moment";
 function Infoform() {
   const initialForm = {
     Name: "",
@@ -13,23 +15,33 @@ function Infoform() {
     StudentID: "",
     Year: "",
     Course: "",
-    Admin: "",
-    Purpose: []
+    Admin: "Admission",
+    Purpose: [],
+    Type: "",
+    Appointment: ""
   };
-
+  const [appointment, setAppointment] = useState([]);
   const [form, setForm] = useState(initialForm);
   const [current, setCurrent] = useState(0);
   const next = () => {
-    if (
-      !form.Name ||
-      !form.Age ||
-      !form.Course ||
-      !form.StudentID ||
-      !form.Year
-    ) {
-      alert("Please fill up all the fields");
+    if (form.Type == "Student") {
+      if (
+        !form.Name ||
+        !form.Age ||
+        !form.Course ||
+        !form.StudentID ||
+        !form.Year
+      ) {
+        alert("Please fill up all the fields");
+      } else {
+        setCurrent(1);
+      }
     } else {
-      setCurrent(1);
+      if (!form.Name || !form.Age) {
+        alert("Please fill up all the fields");
+      } else {
+        setCurrent(1);
+      }
     }
   };
   const nextApp = () => {
@@ -40,6 +52,9 @@ function Infoform() {
     }
   };
   const prevApp = () => {
+    setForm((prev) => {
+      return { ...prev, Purpose: "" };
+    });
     setCurrent(1);
   };
   const prev = () => {
@@ -47,7 +62,7 @@ function Infoform() {
   };
   const submit = () => {
     console.log(form);
-    setForm(initialForm);
+    // setForm(initialForm) TODO:;
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,6 +83,19 @@ function Infoform() {
       });
     }
   };
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_KEY}/getApp`)
+      .then((res) => {
+        setAppointment(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <div className="masterForm">
       {current == 0 ? (
@@ -111,30 +139,44 @@ function Infoform() {
               onChange={handleChange}
               value={form.Age}
             />
-            <label> Student ID</label>
-            <input
-              type="text"
-              name="StudentID"
-              placeholder="ex. 18-0799"
-              onChange={handleChange}
-              value={form.StudentID}
-            />
-            <label>Year</label>
-            <select name="Year" onChange={handleChange} value={form.Year}>
-              <option value="">Select Year</option>
-              <option value="IV">IV Year</option>
-              <option value="III">III Year</option>
-              <option value="II">II Year</option>
-              <option value="I">I Year</option>
+            <label>Are you a Student?</label>
+            <select name="Type" id="" onChange={handleChange} value={form.Type}>
+              <option value="">Select</option>
+              <option value="Student">Student</option>
+              <option value="Non Student">Non Student</option>
             </select>
-            <label>Course</label>
-            <select name="Course" onChange={handleChange} value={form.Course}>
-              <option value="">Select Course</option>
-              <option value="Curse 1">Curse 1</option>
-              <option value="Curse 2">Curse 2</option>
-              <option value="Curse 3">Curse 3</option>
-              <option value="Curse 4">Curse 4</option>
-            </select>
+            {form.Type == "Student" ? (
+              <div>
+                <label> Student ID</label>
+                <input
+                  type="text"
+                  name="StudentID"
+                  placeholder="ex. 18-0799"
+                  onChange={handleChange}
+                  value={form.StudentID}
+                />
+                <label>Year</label>
+                <select name="Year" onChange={handleChange} value={form.Year}>
+                  <option value="">Select Year</option>
+                  <option value="IV">IV Year</option>
+                  <option value="III">III Year</option>
+                  <option value="II">II Year</option>
+                  <option value="I">I Year</option>
+                </select>
+                <label>Course</label>
+                <select
+                  name="Course"
+                  onChange={handleChange}
+                  value={form.Course}
+                >
+                  <option value="">Select Course</option>
+                  <option value="Curse 1">Curse 1</option>
+                  <option value="Curse 2">Curse 2</option>
+                  <option value="Curse 3">Curse 3</option>
+                  <option value="Curse 4">Curse 4</option>
+                </select>
+              </div>
+            ) : null}
             <button
               className="btnGreen"
               onClick={() => {
@@ -147,102 +189,142 @@ function Infoform() {
         ) : current == 1 ? (
           <div className="purposeDiv">
             <label>Office of</label>
-            <select name="Admin" onChange={handleChange} value={form.Admin}>
-              <option value="">Select Office</option>
-              <option value="Admission">Admission</option>
-              <option value="Registrar">Registrar</option>
-            </select>
+            {form.Type == "Student" ? (
+              <select
+                name="Admin"
+                onChange={(e) => {
+                  handleChange(e);
+                  setForm((prev) => {
+                    return { ...prev, Purpose: "" };
+                  });
+                }}
+                value={form.Admin}
+              >
+                <option value="Admission">Admission</option>
+                <option value="Registrar">Registrar</option>
+              </select>
+            ) : (
+              <select
+                name="Admin"
+                onChange={(e) => {
+                  handleChange(e);
+                  setForm((prev) => {
+                    return { ...prev, Purpose: "" };
+                  });
+                }}
+                value={form.Admin}
+              >
+                <option value="Admission">Admission</option>
+              </select>
+            )}
             <label>Purpose</label>
 
-            <div className="checkContainer">
-              <div className="one">
-                <FormControlLabel
-                  color="success"
-                  value="Transcript of Records"
-                  control={<Checkbox />}
-                  label="Transcript of Records"
-                  labelPlacement="start"
-                  onChange={handleCheckChange}
-                />
+            {form.Admin == "Registrar" ? (
+              <div className="checkContainer">
+                <div className="one">
+                  <FormControlLabel
+                    color="success"
+                    value="Transcript of Records"
+                    control={<Checkbox />}
+                    label="Transcript of Records"
+                    labelPlacement="start"
+                    onChange={handleCheckChange}
+                  />
 
-                <FormControlLabel
-                  color="success"
-                  value="Transfer Credentials"
-                  control={<Checkbox />}
-                  label="Transfer Credentials"
-                  labelPlacement="start"
-                  onChange={handleCheckChange}
-                />
-                <FormControlLabel
-                  color="success"
-                  value="Certification of Grades"
-                  control={<Checkbox />}
-                  label="Certification of Grades"
-                  labelPlacement="start"
-                  onChange={handleCheckChange}
-                />
+                  <FormControlLabel
+                    color="success"
+                    value="Transfer Credentials"
+                    control={<Checkbox />}
+                    label="Transfer Credentials"
+                    labelPlacement="start"
+                    onChange={handleCheckChange}
+                  />
+                  <FormControlLabel
+                    color="success"
+                    value="Certification of Grades"
+                    control={<Checkbox />}
+                    label="Certification of Grades"
+                    labelPlacement="start"
+                    onChange={handleCheckChange}
+                  />
 
-                <FormControlLabel
-                  color="success"
-                  value="Certification of Graduation"
-                  control={<Checkbox />}
-                  label="Certification of Graduation"
-                  labelPlacement="start"
-                  onChange={handleCheckChange}
-                />
-                <FormControlLabel
-                  color="success"
-                  value="Certification of Enrollment"
-                  control={<Checkbox />}
-                  label="Certification of Enrollment"
-                  labelPlacement="start"
-                  onChange={handleCheckChange}
-                />
-                <FormControlLabel
-                  color="success"
-                  value="Certification of Honor"
-                  control={<Checkbox />}
-                  label="Certification of Honor"
-                  labelPlacement="start"
-                  onChange={handleCheckChange}
-                />
+                  <FormControlLabel
+                    color="success"
+                    value="Certification of Graduation"
+                    control={<Checkbox />}
+                    label="Certification of Graduation"
+                    labelPlacement="start"
+                    onChange={handleCheckChange}
+                  />
+                  <FormControlLabel
+                    color="success"
+                    value="Certification of Enrollment"
+                    control={<Checkbox />}
+                    label="Certification of Enrollment"
+                    labelPlacement="start"
+                    onChange={handleCheckChange}
+                  />
+                  <FormControlLabel
+                    color="success"
+                    value="Certification of Honor"
+                    control={<Checkbox />}
+                    label="Certification of Honor"
+                    labelPlacement="start"
+                    onChange={handleCheckChange}
+                  />
+                </div>
+                <div className="two">
+                  <FormControlLabel
+                    color="success"
+                    value="Certification, Authentication and Verification"
+                    control={<Checkbox />}
+                    label="Certification, Authentication and Verification"
+                    labelPlacement="start"
+                    onChange={handleCheckChange}
+                  />
+                  <FormControlLabel
+                    color="success"
+                    value="Authentication of TOR/Dimploma"
+                    control={<Checkbox />}
+                    label="Authentication of TOR/Dimploma"
+                    labelPlacement="start"
+                    onChange={handleCheckChange}
+                  />
+                  <FormControlLabel
+                    color="success"
+                    value="Diploma"
+                    control={<Checkbox />}
+                    label="Diploma"
+                    labelPlacement="start"
+                    onChange={handleCheckChange}
+                  />
+
+                  <FormControlLabel
+                    color="success"
+                    value="Enrollment"
+                    control={<Checkbox />}
+                    label="Enrollment"
+                    labelPlacement="start"
+                    onChange={handleCheckChange}
+                  />
+                </div>
               </div>
-              <div className="two">
-                <FormControlLabel
-                  color="success"
-                  value="Certification, Authentication and Verification"
-                  control={<Checkbox />}
-                  label="Certification, Authentication and Verification"
-                  labelPlacement="start"
-                  onChange={handleCheckChange}
-                />
-                <FormControlLabel
-                  color="success"
-                  value="Authentication of TOR/Dimploma"
-                  control={<Checkbox />}
-                  label="Authentication of TOR/Dimploma"
-                  labelPlacement="start"
-                  onChange={handleCheckChange}
-                />
-                <FormControlLabel
-                  color="success"
-                  value="Diploma"
-                  control={<Checkbox />}
-                  label="Diploma"
-                  labelPlacement="start"
-                  onChange={handleCheckChange}
-                />
-
-                <FormControlLabel
-                  color="success"
-                  value="Enrollment"
-                  control={<Checkbox />}
-                  label="Enrollment"
-                  labelPlacement="start"
-                  onChange={handleCheckChange}
-                />
+            ) : (
+              <div className="textareadiv">
+                <textarea
+                  name=""
+                  id=""
+                  cols="50"
+                  rows="10"
+                  value={form.Purpose}
+                  onChange={(e) => {
+                    setForm((prev) => {
+                      return { ...prev, Purpose: e.target.value };
+                    });
+                  }}
+                ></textarea>
               </div>
-            </div>
+            )}
             <div className="btnflex">
               <button
                 type="submit"
@@ -266,6 +348,47 @@ function Infoform() {
           </div>
         ) : current == 2 ? (
           <div className="appCont">
+            <div className="amsterapp">
+              <div className="timeContainer">
+                <h4>Available Time Appointment</h4>
+                <div className="timeSubContainer">
+                  {form.Appointment
+                    ? form.Appointment.Time.map((time) => {
+                        return (
+                          <div className="cardApp">
+                            <h4>{moment(time.Time, "hh:mm").format("LT")}</h4>
+                          </div>
+                        );
+                      })
+                    : null}
+                </div>
+              </div>
+              <div className="dateContainer">
+                <h4>Available Date Appointment</h4>
+                <div className="dateSubContainer">
+                  {appointment.map((app) => {
+                    return (
+                      <div
+                        style={{
+                          border:
+                            form.Appointment == app ? "2px solid black" : null
+                        }}
+                        key={app._id}
+                        className="cardApp"
+                        onClick={() => {
+                          setForm((prev) => {
+                            return { ...prev, Appointment: app };
+                          });
+                        }}
+                      >
+                        <h4>{moment(app.Date).format("MMMM Do YYYY")} </h4>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
             <div className="btnflex">
               <button
                 type="submit"

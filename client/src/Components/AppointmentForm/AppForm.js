@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-function Main() {
+function AppForm() {
   const initialState = {
     Date: "",
     Time: []
@@ -77,4 +77,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default AppForm;
