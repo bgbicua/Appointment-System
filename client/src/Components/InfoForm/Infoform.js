@@ -8,6 +8,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import moment from "moment";
+import validator from "validator";
 function Infoform() {
   const initialForm = {
     Name: "",
@@ -18,7 +19,12 @@ function Infoform() {
     Admin: "Admission",
     Purpose: [],
     Type: "",
-    Appointment: ""
+    Appointment: {
+      app: "",
+      date: "",
+      time: ""
+    },
+    Email: ""
   };
   const [appointment, setAppointment] = useState([]);
   const [form, setForm] = useState(initialForm);
@@ -30,15 +36,21 @@ function Infoform() {
         !form.Age ||
         !form.Course ||
         !form.StudentID ||
-        !form.Year
+        !form.Year ||
+        !form.Email ||
+        !form.Type
       ) {
         alert("Please fill up all the fields");
+      } else if (!validator.isEmail(form.Email)) {
+        alert("Invalid Email");
       } else {
         setCurrent(1);
       }
     } else {
-      if (!form.Name || !form.Age) {
+      if (!form.Name || !form.Age || !form.Email || !form.Type) {
         alert("Please fill up all the fields");
+      } else if (!validator.isEmail(form.Email)) {
+        alert("Invalid Email");
       } else {
         setCurrent(1);
       }
@@ -61,7 +73,14 @@ function Infoform() {
     setCurrent(0);
   };
   const submit = () => {
-    console.log(form);
+    axios
+      .post(`${process.env.REACT_APP_KEY}/insertRequest`, form)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     // setForm(initialForm) TODO:;
   };
   const handleChange = (e) => {
@@ -138,6 +157,13 @@ function Infoform() {
               name="Age"
               onChange={handleChange}
               value={form.Age}
+            />
+            <label>Email</label>
+            <input
+              type="email"
+              name="Email"
+              onChange={handleChange}
+              value={form.Email}
             />
             <label>Are you a Student?</label>
             <select name="Type" id="" onChange={handleChange} value={form.Type}>
@@ -352,39 +378,92 @@ function Infoform() {
               <div className="timeContainer">
                 <h4>Available Time Appointment</h4>
                 <div className="timeSubContainer">
-                  {form.Appointment
-                    ? form.Appointment.Time.map((time) => {
+                  {form.Appointment.app ? (
+                    form.Appointment.app.Time.map((time) => {
+                      if (time.Request.Status == "Pending") {
                         return (
-                          <div className="cardApp">
+                          <div
+                            className="cardApp"
+                            onClick={() => {
+                              console.log(time);
+                              setForm((prev) => {
+                                return {
+                                  ...prev,
+                                  Appointment: {
+                                    app: prev.Appointment.app,
+                                    date: prev.Appointment.date,
+                                    time: time.Time
+                                  }
+                                };
+                              });
+                            }}
+                          >
                             <h4>{moment(time.Time, "hh:mm").format("LT")}</h4>
                           </div>
                         );
-                      })
-                    : null}
+                      } else {
+                        return (
+                          <div>
+                            <h4>Null</h4>
+                          </div>
+                        );
+                      }
+                    })
+                  ) : (
+                    <div>
+                      <h4>Null</h4>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="dateContainer">
                 <h4>Available Date Appointment</h4>
                 <div className="dateSubContainer">
-                  {appointment.map((app) => {
-                    return (
-                      <div
-                        style={{
-                          border:
-                            form.Appointment == app ? "2px solid black" : null
-                        }}
-                        key={app._id}
-                        className="cardApp"
-                        onClick={() => {
-                          setForm((prev) => {
-                            return { ...prev, Appointment: app };
-                          });
-                        }}
-                      >
-                        <h4>{moment(app.Date).format("MMMM Do YYYY")} </h4>
-                      </div>
-                    );
-                  })}
+                  {appointment &&
+                    appointment.map((app) => {
+                      var found = false;
+                      for (var i = 0; i < app.Time.length; i++) {
+                        console.log(app.Time[i].Request.Status);
+                        if (app.Time[i].Request.Status == "Pending") {
+                          found = true;
+                          break;
+                        }
+                      }
+                      if (found) {
+                        return (
+                          <div
+                            style={{
+                              border:
+                                form.Appointment.app == app
+                                  ? "2px solid black"
+                                  : null
+                            }}
+                            key={app._id}
+                            className="cardApp"
+                            onClick={() => {
+                              setForm((prev) => {
+                                return {
+                                  ...prev,
+                                  Appointment: {
+                                    app: app,
+                                    date: app.Date,
+                                    time: ""
+                                  }
+                                };
+                              });
+                            }}
+                          >
+                            <h4>{moment(app.Date).format("MMMM Do YYYY")} </h4>
+                          </div>
+                        );
+                      } else {
+                        return (
+                          <div>
+                            <h4>Null</h4>
+                          </div>
+                        );
+                      }
+                    })}
                 </div>
               </div>
             </div>

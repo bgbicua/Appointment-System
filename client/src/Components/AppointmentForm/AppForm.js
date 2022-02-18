@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./appform.css";
 function AppForm() {
   const initialState = {
     Date: "",
@@ -32,12 +33,8 @@ function AppForm() {
       });
   };
   return (
-    <div>
-      <h1>Hello from admin</h1>
-
-      <h4>Post Appointment as registrar</h4>
-
-      <div>
+    <div className="masterAppform">
+      <div className="h-3/4 flex flex-col justify-evenly p-4 border-2 shadow rounded bg-slate-200">
         <label>Date</label>
         <input
           type="date"
@@ -64,14 +61,23 @@ function AppForm() {
             Add Time
           </button>
           <button
-            className="btnGreen"
+            className="btnGreen ml-4"
             onClick={() => {
               handleSubmit();
             }}
           >
-            Submit Appointment
+            Submit
           </button>
         </div>
+      </div>
+
+      <div>
+        <h4>{state.Date}</h4>
+        <ul>
+          {state.Time.map((t) => {
+            return <li>{t.Time}</li>;
+          })}
+        </ul>
       </div>
     </div>
   );

@@ -21,9 +21,11 @@ mongoose
 const studentRouter = require("./routes/Student");
 const adminRouter = require("./routes/adminRegistrar");
 const appointmentRouter = require("./routes/appointmentRoute");
+const RequestRouter = require("./routes/requestRoute");
 app.use("/api", studentRouter);
 app.use("/api", adminRouter);
 app.use("/api", appointmentRouter);
+app.use("/api", RequestRouter);
 app.listen(port, () => {
   console.log("Server Runs on Port : " + port);
 });

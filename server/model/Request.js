@@ -4,10 +4,15 @@ const Schema = mongoose.Schema;
 
 const requestSchema = new Schema(
   {
-    Student: { type: mongoose.Schema.Types.ObjectId, ref: "Student" },
-    Appointment: { type: mongoose.Schema.Types.ObjectId, ref: "Appointment" },
+    Appointment: {},
     Office: String,
-    Request: []
+    Name: String,
+    Age: String,
+    StudentID: String,
+    Year: String,
+    Course: String,
+    Purpose: [],
+    Email: String
   },
   { timestamps: true }
 );

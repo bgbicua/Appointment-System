@@ -1,14 +1,14 @@
 .masterAdmin {
   height: 100vh;
-  background-color: rgb(75, 214, 75);
+
   display: grid;
   grid-template-columns: 0.2fr 1fr;
 }
 
 .leftBar {
-  background-color: rgb(128, 202, 128);
+  background-color: #333333;
 }
 
 .rightBar {
-  background-color: rgb(44, 102, 44);
+  background-color: rgb(236, 240, 240);
 }

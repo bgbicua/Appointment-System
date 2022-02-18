@@ -8,7 +8,7 @@ const appointmentSchema = new Schema(
     Time: [
       {
         Time: String,
-        Student: String
+        Request: { type: Object, default: { Status: "Pending" } }
       }
     ]
   },
