@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import validator from "validator";
 import { useNavigate } from "react-router-dom";
 import "./portal.css";
 function Portal() {
-  let history = useNavigate();
-
+  let navigate = useNavigate();
   const initialState = {
-    Email: "",
+    Username: "",
     Password: ""
   };
   const [state, setState] = useState(initialState);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setState((prev) => {
@@ -19,42 +18,38 @@ function Portal() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (state.Email && state.Password) {
-      if (validator.isEmail(state.Email)) {
-        history("/about");
-      } else {
-        alert("Your Email is not valid");
-      }
-    } else {
-      alert("Please Fill up all the fields");
-    }
+    axios
+      .post(`${process.env.REACT_APP_KEY}/login`, state)
+      .then((res) => {
+        localStorage.setItem("token", res.data.token);
+        navigate("/admin");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-
   return (
-    <div className="portalMaster">
-      <div className="portalContainer">
-        <div className="logo">
-          <img src="./img/logo1.png" alt="" />
-          <h1>Admin Portal</h1>
-        </div>
-
-        <form action="" onSubmit={handleSubmit} className="portalForm">
-          <label>Email</label>
+    <div className="masterPortal bgGreen">
+      <div className="contAdmi bg">
+        <h1>Admin Portal</h1>
+        <form action="" onSubmit={handleSubmit}>
+          <label htmlFor="">Username</label>
           <input
             type="text"
             onChange={handleChange}
-            name="Email"
-            value={state.Email}
+            name="Username"
+            value={state.Username}
           />
-          <label>Password</label>
+          <label htmlFor="">Password</label>
           <input
             type="password"
             onChange={handleChange}
             name="Password"
             value={state.Password}
           />
-          <button type="submit">Submit</button>
+          <button className="btnGreen" type="submit">
+            Submit
+          </button>
         </form>
       </div>
     </div>

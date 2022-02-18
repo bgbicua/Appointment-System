@@ -1,3 +1,5 @@
+var bcrypt = require("bcrypt");
+var jwt = require("jsonwebtoken");
 let RegistrarAdmin = require("../model/RegistrarAdmin");
 exports.Register = (req, res) => {
   const Username = req.body.Username;

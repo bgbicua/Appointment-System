@@ -19,7 +19,11 @@ mongoose
   .then(() => console.log("Database is Running"))
   .catch((err) => console.log("The Error is " + err));
 const studentRouter = require("./routes/Student");
+const adminRouter = require("./routes/adminRegistrar");
+const appointmentRouter = require("./routes/appointmentRoute");
 app.use("/api", studentRouter);
+app.use("/api", adminRouter);
+app.use("/api", appointmentRouter);
 app.listen(port, () => {
   console.log("Server Runs on Port : " + port);
 });

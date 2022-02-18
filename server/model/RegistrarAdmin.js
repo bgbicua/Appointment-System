@@ -5,7 +5,8 @@ const Schema = mongoose.Schema;
 const registrarAdminSchema = new Schema(
   {
     Username: String,
-    Password: String
+    Password: String,
+    Authentication: String
   },
   { timestamps: true }
 );
