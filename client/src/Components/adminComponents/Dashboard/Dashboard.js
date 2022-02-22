@@ -5,7 +5,7 @@ import Modal from "@mui/material/Modal";
 import QRCode from "qrcode";
 function Dashboard() {
   const [adminssion, setAdminssion] = useState([]);
-  const [src, setSrc] = useState("");
+  const [src, setSrc] = useState({ src: "", data: "" });
   const [student, setStudent] = useState([]);
   const [open, setOpen] = React.useState(false);
   var encrypt = (str) => {
@@ -15,7 +15,7 @@ function Dashboard() {
       while (code > 122) {
         code = code - 122 + 96;
       }
-      resultArray.push(String.fromCharCode(code)) ;
+      resultArray.push(String.fromCharCode(code));
     }
     return resultArray.join("");
   };
@@ -31,20 +31,21 @@ function Dashboard() {
     return resultArray.join("");
   };
   const handleOpen = (req) => {
-    var data = `Student# : ${req.StudentID} Name : ${req.Name} Age: ${
-      req.Age
-    } Purpose : ${req.Purpose.map((p) => {
-      return p;
-    })} Date&Time Appointment : ${req.Appointment.date}||${
-      req.Appointment.time
-    } Request For the Office of ${req.Office}`;
+    var data = `Student# : ${req.StudentID}
+     Name : ${req.Name}
+     Age: ${req.Age}
+     Purpose : ${req.Purpose.map((p) => {
+       return p;
+     })} 
+    Date&Time Appointment : ${req.Appointment.date}||${req.Appointment.time}
+    Request For the Office of ${req.Office}`;
 
     console.log(encrypt(data));
     console.log(decrypt(encrypt(data)));
     setOpen(true);
     QRCode.toDataURL(data)
       .then((url) => {
-        setSrc(url);
+        setSrc({ src: url, data: data, request: req });
       })
       .catch((err) => {
         console.error(err);
@@ -77,6 +78,31 @@ function Dashboard() {
     getStudent();
     getAdmission();
   }, []);
+
+  const handleSendEmail = (student) => {
+    axios
+      .post(`${process.env.REACT_APP_KEY}/sendQr`, { data: src })
+      .then((res) => {
+        alert(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleReject = (student) => {
+    if (window.confirm("Are you sure you want to reject the request")) {
+      axios
+        .post(`${process.env.REACT_APP_KEY}/rejectRequest`, student)
+        .then((res) => {
+          alert(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+    }
+  };
 
   const style = {
     position: "absolute",
@@ -181,7 +207,12 @@ function Dashboard() {
                       >
                         Accept
                       </div>
-                      <div className="border w-fit p-2 rounded-3xl duration-200 mr-1 cursor-pointer text-xs bg-red-600 font-bold  text-white hover:bg-red-400 ">
+                      <div
+                        onClick={() => {
+                          handleReject(stud);
+                        }}
+                        className="border w-fit p-2 rounded-3xl duration-200 mr-1 cursor-pointer text-xs bg-red-600 font-bold  text-white hover:bg-red-400 "
+                      >
                         Reject
                       </div>
                     </td>
@@ -197,8 +228,26 @@ function Dashboard() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <div style={style} className="h-2/4 bg-green-700 rounded-sm">
-          <img src={src} alt="" className="h-full" />
+        <div style={style} className="h-auto bg-green-700 rounded-sm p-8">
+          <img src={src.src} alt="" className="h-full" />
+          <div className="flex items-center justify-evenly h-20 ">
+            <div
+              className="btnGreen"
+              onClick={() => {
+                handleSendEmail();
+              }}
+            >
+              Send
+            </div>
+            <div
+              onClick={() => {
+                handleClose();
+              }}
+              className="cursor-pointer bg-red-600 p-2 mt-4 shadow-lg h-12 text-slate-100 rounded-md flex items-center justify-center"
+            >
+              Cancel
+            </div>
+          </div>
         </div>
       </Modal>
     </div>

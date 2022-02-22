@@ -22,7 +22,6 @@ function AppForm() {
     setTime("");
   };
   const handleSubmit = () => {
-    console.log(state);
     axios
       .post(`${process.env.REACT_APP_KEY}/insertApp`, state)
       .then((res) => {
