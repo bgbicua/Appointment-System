@@ -1,0 +1,82 @@
+.infoform {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: auto;
+  padding: 20px;
+
+  margin-bottom: 4rem;
+  border-radius: 12px;
+}
+
+.personalForm {
+}
+
+.purposeDiv {
+}
+
+.masterForm {
+  margin-top: 2rem;
+  height: 100vh;
+  margin-bottom: 4rem;
+}
+.checkContainer {
+  display: flex;
+  justify-content: space-evenly;
+}
+.checkContainer .one {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkContainer .two {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+}
+
+.textareadiv textarea {
+  width: 100%;
+  padding: 20px;
+  margin-top: 10px;
+}
+
+.amsterapp {
+  height: auto;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+}
+
+.timeContainer {
+}
+
+.timeContainer h4 {
+  text-align: center;
+}
+
+.dateContainer {
+}
+.dateContainer h4 {
+  text-align: center;
+}
+.dateSubContainer {
+}
+
+.cardApp {
+  margin: 10px 10px 10px 0;
+  background-color: rgb(43, 168, 43);
+  padding: 10px;
+  border-radius: 4px;
+  width: 100%;
+  transition: 0.1s ease;
+  cursor: pointer;
+}
+
+.cardApp:hover {
+  border: 2px solid black;
+}
