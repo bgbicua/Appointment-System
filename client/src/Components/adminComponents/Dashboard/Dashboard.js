@@ -56,6 +56,7 @@ function Dashboard() {
     axios
       .get(`${process.env.REACT_APP_KEY}/getStudentRequest`)
       .then((res) => {
+        console.log(res.data);
         setStudent(res.data);
       })
       .catch((err) => {
@@ -96,6 +97,7 @@ function Dashboard() {
         .post(`${process.env.REACT_APP_KEY}/rejectRequest`, student)
         .then((res) => {
           alert(res.data);
+          getStudent();
         })
         .catch((err) => {
           console.log(err);

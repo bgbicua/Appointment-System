@@ -40,11 +40,23 @@ function Appointment() {
 
   const handleDeleteAppointment = (app) => {
     if (window.confirm("Are you sure you want to delete the appointment?")) {
-      console.log(app);
+      axios
+        .delete(`${process.env.REACT_APP_KEY}/deleteApp`, { data: app })
+        .then((res) => {
+          axios
+            .get(`${process.env.REACT_APP_KEY}/getApp`)
+            .then((res) => {
+              setAppointment(res.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
     }
-
-    console.log(app);
   };
   const handleClose = () => {
     setModal(false);

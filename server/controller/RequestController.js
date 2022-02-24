@@ -125,7 +125,7 @@ exports.insertRequest = (req, res) => {
 };
 
 exports.getStudentRequest = (req, res) => {
-  Request.find({ Office: "Registrar" })
+  Request.find()
     .then((request) => {
       res.json(request);
     })
@@ -181,19 +181,23 @@ exports.rejectRequest = (req, res) => {
   smtp(req.body.Email, "Request Rejected", req.body, 0, false).then(() => {
     console.log(req.body.Appointment.time);
 
-    Appointment.findByIdAndUpdate(req.body.Appointment.app._id, {
+    App.findByIdAndUpdate(req.body.Appointment.app._id, {
       $pull: {
         Time: { Time: req.body.Appointment.time }
       }
     })
       .then((appointment) => {
-        console.log(appointment);
+        Request.findByIdAndDelete(req.body._id)
+          .then((reqs) => {
+            res.json("Successfully Rejected");
+          })
+          .catch((err) => {
+            res.json(err);
+          });
       })
       .catch((err) => {
         res.json(err);
       });
-
-    res.json("Successfully Rejected");
   });
 };
 
