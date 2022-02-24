@@ -5,13 +5,15 @@ const {
   getStudentRequest,
   sendQr,
   rejectRequest,
-  getRequestCount
+  getRequestCount,
+  getRegistrarRequest
 } = require("../controller/RequestController");
 
 const router = express.Router();
 
 router.post("/insertRequest", insertRequest);
 router.get("/getStudentRequest", getStudentRequest);
+
 router.get("/getAdminssiontRequest", getAdminssiontRequest);
 router.post("/sendQR", sendQr);
 router.post("/rejectRequest", rejectRequest);
