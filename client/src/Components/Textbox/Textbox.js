@@ -5,8 +5,12 @@ function Textbox() {
   return (
     <div className="text-box">
       <img src="img/books.png" />
-      <h1>PAMANTASAN NG LUNSOD NG SAN PABLO </h1>
-      <p>Website that can set Appointment through Modern Technology</p>
+      <h1 className="text-black font-semibold	">
+        Pamantasan ng Lungsod ng San Pablos' Pagtatalaga{" "}
+      </h1>
+      <h4 class="text-center font-bold	text-black pb-5	">
+        Website that can set Appointment through Modern Technology
+      </h4>
       <a
         href="https://www.facebook.com/PLSPOfficialFBPage/about/?ref=page_internal"
         className="hero-btn"

@@ -8,10 +8,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import moment from "moment";
-import { useNavigate } from "react-router-dom";
 import validator from "validator";
+
 function Infoform() {
-  let navigate = useNavigate();
   const initialForm = {
     Name: "",
     Age: 0,
@@ -79,7 +78,6 @@ function Infoform() {
       .post(`${process.env.REACT_APP_KEY}/insertRequest`, form)
       .then((res) => {
         console.log(res.data);
-        navigate("/");
       })
       .catch((err) => {
         console.log(err);
@@ -143,7 +141,7 @@ function Infoform() {
           in forfeiture of application.
         </p>
       ) : null}
-      <div className="infoform bg">
+      <div className="infoform">
         {current == 0 ? (
           <div className="personalForm">
             <label>Surename , Firstname , Middlename</label>
