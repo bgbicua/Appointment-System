@@ -4,6 +4,7 @@ let RegistrarAdmin = require("../model/RegistrarAdmin");
 exports.Register = (req, res) => {
   const Username = req.body.Username;
   const Password = req.body.Password;
+  const Auth = req.body.Auth;
   if (!Username || !Password) {
     res.status(422).json({ msg: "Please Enter Username or Password" });
   }
@@ -15,7 +16,11 @@ exports.Register = (req, res) => {
     })
     .catch((err) => res.status(400).json("The Error is : " + err));
   bcrypt.hash(Password, 12).then((hashedpassword) => {
-    const newUser = new RegistrarAdmin({ Username, Password: hashedpassword });
+    const newUser = new RegistrarAdmin({
+      Username,
+      Password: hashedpassword,
+      Authentication: Auth
+    });
     newUser
       .save()
       .then(() => res.json({ msg: "RegistrarAdmin Added" }))
@@ -26,7 +31,7 @@ exports.Register = (req, res) => {
 };
 
 exports.protected = (req, res) => {
-  res.json(req.RegistrarAdmin);
+  res.json(req.user);
 };
 exports.Signin = (req, res) => {
   const Username = req.body.Username;

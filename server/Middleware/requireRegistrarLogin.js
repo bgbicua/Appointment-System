@@ -4,6 +4,7 @@ const router = require("express").Router();
 const mongoose = require("mongoose");
 let RegistrarAdmin = require("../model/RegistrarAdmin");
 module.exports = (req, res, next) => {
+  console.log(req.headers);
   const { authorization } = req.headers;
   if (!authorization) {
     res.status(401).json({ error: "You must be Logged In" });

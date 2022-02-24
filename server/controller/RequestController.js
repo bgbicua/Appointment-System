@@ -125,7 +125,7 @@ exports.insertRequest = (req, res) => {
 };
 
 exports.getStudentRequest = (req, res) => {
-  Request.find()
+  Request.find({ Office: "Registrar" })
     .then((request) => {
       res.json(request);
     })
