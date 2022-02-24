@@ -16,10 +16,14 @@ function Navigation() {
           <div className="navlinks">
             <ul>
               <Link to="/">
-                <li className="li">HOME</li>
+                <li className="li">
+                  <div className="text-2xl text-white	">HOME</div>
+                </li>
               </Link>
               <Link to="/About">
-                <li className="li">ABOUT</li>
+                <li className="li">
+                  <div className="text-2xl text-white	">ABOUT</div>
+                </li>
               </Link>
             </ul>
           </div>

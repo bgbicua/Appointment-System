@@ -3,22 +3,16 @@
   flex-direction: column;
   width: 80%;
   margin: auto;
-  padding: 20px;
-
-  margin-bottom: 4rem;
+  padding: 10px;
+  margin-top: 2rem;
   border-radius: 12px;
-}
-
-.personalForm {
-}
-
-.purposeDiv {
+  background-color: rgba(175, 188, 199, 0.363);
 }
 
 .masterForm {
-  margin-top: 2rem;
-  height: 100vh;
-  margin-bottom: 4rem;
+  margin-top: 7rem;
+  margin-bottom: 7rem;
+  height: auto;
 }
 .checkContainer {
   display: flex;
@@ -52,19 +46,12 @@
   grid-gap: 20px;
 }
 
-.timeContainer {
-}
-
 .timeContainer h4 {
   text-align: center;
 }
 
-.dateContainer {
-}
 .dateContainer h4 {
   text-align: center;
-}
-.dateSubContainer {
 }
 
 .cardApp {

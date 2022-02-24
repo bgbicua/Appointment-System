@@ -1,8 +1,8 @@
 img {
   width: 400px;
   height: 200px;
+  margin: auto;
 }
-
 .text-box {
   width: 90%;
   color: #fff;
@@ -24,11 +24,12 @@ img {
 .hero-btn {
   display: inline-block;
   text-decoration: none;
-  color: #fff;
-  border: 1px solid #fff;
+  color: rgb(0, 0, 0);
+  border: 1px solid rgb(0, 0, 0);
   padding: 12px 34px;
   font-size: 13px;
-  background: transparent;
+  font-weight: bold;
+  background: rgb(162, 169, 177);
   position: relative;
   cursor: pointer;
 }
