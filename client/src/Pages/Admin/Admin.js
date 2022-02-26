@@ -7,10 +7,12 @@ import Dashboard from "../../Components/adminComponents/Dashboard/Dashboard";
 import Configuration from "../../Components/adminComponents/Configuration/Configuration";
 import AddAppointment from "../../Components/adminComponents/Appointment/AddAppointment";
 import EditAppointment from "../../Components/adminComponents/Appointment/EditAppointment";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 function Admin() {
   const [admin, setAdmin] = useState(null);
-
+  let navigate = useNavigate();
   const [toggle, setToggle] = useState({
     Dashboard: true,
     Appointment: false,
@@ -38,11 +40,21 @@ function Admin() {
   useEffect(() => {
     var token = localStorage.getItem("token");
     getAdmin(token);
+
+    if (token) {
+    } else {
+      navigate("/portal");
+    }
   }, []);
   return (
     <div className="masterAdmin">
       <div className="leftBar">
-        <LeftBar toggle={toggle} setToggle={setToggle} />
+        <LeftBar
+          toggle={toggle}
+          setToggle={setToggle}
+          admin={admin}
+          setAdmin={setAdmin}
+        />
       </div>
 
       <div className="rightBar">
@@ -67,7 +79,9 @@ function Admin() {
             ) : null}
           </div>
         ) : (
-          <div className="wala">null</div>
+          <div className="bg-white h-full w-full flex items-center justify-center">
+            <CircularProgress />
+          </div>
         )}
       </div>
     </div>
