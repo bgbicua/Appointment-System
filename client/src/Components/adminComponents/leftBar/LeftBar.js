@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { RiDashboardFill, RiLogoutCircleRLine } from "react-icons/ri";
 import { DiAptana } from "react-icons/di";
 import { BsFillCalendar2CheckFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 import { AiOutlineArrowRight } from "react-icons/ai";
+import CircularProgress from "@mui/material/CircularProgress";
 import "./leftbar.css";
-function LeftBar({ setToggle, toggle }) {
+function LeftBar({ setToggle, toggle, admin, setAdmin }) {
+  let navigate = useNavigate();
   const clickDash = () => {
     setToggle({
       Dashboard: true,
@@ -53,9 +56,19 @@ function LeftBar({ setToggle, toggle }) {
       Edit: true
     });
   };
+
+  const clickLogOut = () => {
+    if (window.confirm("Are you sure you want to log-out?")) {
+      localStorage.removeItem("token");
+      navigate("/portal");
+    } else {
+    }
+  };
   return (
     <div className="masterLeftBar">
-      <h4 className="adname">Admin Name</h4>
+      <h4 className="adname capitalize text-white font-bold">
+        {admin ? admin.Authentication : "Invalid Access"}
+      </h4>
 
       <ul>
         <li>
@@ -133,7 +146,12 @@ function LeftBar({ setToggle, toggle }) {
         </li>
         <li>
           <li>
-            <div className="linkcard">
+            <div
+              className="linkcard"
+              onClick={() => {
+                clickLogOut();
+              }}
+            >
               <RiLogoutCircleRLine />
               <h4>Log-out</h4>
             </div>
